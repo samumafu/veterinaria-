@@ -4,5 +4,5 @@ import { TbAi } from 'react-icons/tb'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(),],
 })
