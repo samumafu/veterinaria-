@@ -22,27 +22,76 @@ function App() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card title="🐾 Mascotas con más visitas al veterinario" data={mascotas} />
-        <Card title="💉 Vacunas aplicadas por tipo de animal" data={vacunas} />
-        <Card title="👨‍👩‍👧 Dueños con más de 3 mascotas" data={propietarios} />
-        <Card title="🛠 Servicios veterinarios más solicitados" data={servicios} />
+        <ExpandableCard
+          title="🐾 Mascotas con más visitas"
+          description="Listado de mascotas que han ido más veces al veterinario"
+          data={mascotas}
+          fields={['nombre', 'especie', 'total_visitas']}
+        />
+
+        <ExpandableCard
+          title="💉 Vacunas por tipo de animal"
+          description="Cantidad de vacunas aplicadas según el tipo de mascota"
+          data={vacunas}
+          // No especificamos campos: se detectan automáticamente
+        />
+
+        <ExpandableCard
+          title="👨‍👩‍👧 Propietarios con más de 3 mascotas"
+          description="Dueños que tienen 4 o más animales registrados"
+          data={propietarios}
+          fields={['nombre', 'cantidad_mascotas']}
+        />
+
+        <ExpandableCard
+          title="🛠 Servicios más solicitados"
+          description="Servicios veterinarios que han sido más utilizados"
+          data={servicios}
+          // También autodetecta campos
+        />
       </div>
     </div>
   );
 }
 
-function Card({ title, data }) {
+function ExpandableCard({ title, description, data, fields = [] }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = () => setExpanded(!expanded);
+  const displayedData = expanded ? data : data.slice(0, 3);
+
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transition-all">
-      <h2 className="text-2xl font-semibold text-indigo-600 mb-4">{title}</h2>
+    <div
+      className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transition-all cursor-pointer"
+      onClick={toggleExpanded}
+    >
+      <h2 className="text-2xl font-semibold text-indigo-600 mb-1">{title}</h2>
+      <p className="text-gray-500 mb-4">{description}</p>
+
       {data.length > 0 ? (
-        <ul className="list-disc list-inside text-gray-700 space-y-1">
-          {data.map((item, index) => (
-            <li key={index}>{Object.values(item).join(' - ')}</li>
+        <ul className="space-y-2 text-gray-700">
+          {displayedData.map((item, index) => (
+            <li
+              key={index}
+              className="bg-indigo-50 p-3 rounded-lg border border-indigo-100 hover:bg-indigo-100 transition"
+            >
+              {(fields.length > 0 ? fields : Object.keys(item)).map((field, i) => (
+                <div key={i}>
+                  <span className="font-medium capitalize">{field.replace(/_/g, ' ')}:</span>{' '}
+                  {item[field]}
+                </div>
+              ))}
+            </li>
           ))}
+          {!expanded && data.length > 3 && (
+            <li className="text-indigo-500 text-sm mt-2 underline">Ver más...</li>
+          )}
+          {expanded && (
+            <li className="text-indigo-400 text-sm mt-2 underline">Ver menos</li>
+          )}
         </ul>
       ) : (
-        <p className="text-gray-500 italic">No hay datos disponibles</p>
+        <p className="text-gray-400 italic">No hay datos disponibles</p>
       )}
     </div>
   );

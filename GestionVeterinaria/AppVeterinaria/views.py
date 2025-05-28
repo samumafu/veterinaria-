@@ -29,7 +29,7 @@ def propietarios_con_muchas_mascotas(request):
             "nombre": p.nombre,
             "email": p.email,
             "telefono": p.telefono,
-            "total_mascotas": p.masctoas.count()
+            "total_mascotas": p.mascotas.count()
         } for p in propietarios
     ]
     return JsonResponse(data, safe=False)
