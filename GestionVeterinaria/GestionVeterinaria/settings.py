@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gestion_veterinaria',     # Nombre que usarás en MySQL Workbench
         'USER': 'root',                 # Usuario de MySQL
-        'PASSWORD': 'Samumafuuff314.',
+        'PASSWORD': 'Samumafuuff314',
         'HOST': 'localhost',
         'PORT': '3306',
     }
