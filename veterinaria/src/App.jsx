@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import MascotasCard from './components/MascotasVisitas';
-import VacunasCard from './components/VacunasporTipo';
-import PropietariosCard from './components/Propietarios';
-import ServiciosCard from './components/Servicios';
+import MascotasVisitas from './components/MascotasVisitas';
+import VacunasporTipo from './components/VacunasporTipo';
+import Propietarios from './components/Propietarios';
+import Servicios from './components/Servicios';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 
@@ -118,10 +118,10 @@ const Dashboard = () => {
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Grid de tarjetas */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <MascotasCard mascotas={data.mascotas} loading={loading} />
-          <VacunasCard vacunas={data.vacunas} loading={loading} />
-          <PropietariosCard propietarios={data.propietarios} loading={loading} />
-          <ServiciosCard servicios={data.servicios} loading={loading} />
+          <MascotasVisitas mascotas={data.mascotas} loading={loading} />
+          <VacunasporTipo vacunas={data.vacunas} loading={loading} />
+          <Propietarios propietarios={data.propietarios} loading={loading} />
+          <Servicios servicios={data.servicios} loading={loading} />
         </div>
 
         {/* Panel de control */}
