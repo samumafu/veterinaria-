@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import MascotasVisitas from './components/MascotasVisitas';
 import VacunasporTipo from './components/VacunasporTipo';
 import Propietarios from './components/Propietarios';
@@ -17,28 +18,36 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
 
-  // Configuración de la API
-  const API_BASE_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://tu-servidor-django.com' 
-    : 'http://localhost:8000';
+  // Configuración de la API usando variable de entorno personalizada
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
   useEffect(() => {
     fetchAllData();
   }, []);
 
   const fetchData = async (endpoint) => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    try {
+      const response = await fetch(`${API_BASE_URL}${endpoint}/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        // Mejor manejo de errores
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${response.statusText} - ${errorText}`);
       }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
+
+      return response.json();
+    } catch (err) {
+      // Log detallado para desarrollo
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Error en fetchData:', err);
+      }
+      throw err;
     }
-    
-    return response.json();
   };
 
   const fetchAllData = async () => {
@@ -184,4 +193,35 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center">
+            <h1 className="text-3xl font-bold text-gray-900">🏥 Dashboard Veterinaria</h1>
+            <nav className="flex gap-4 mt-4 sm:mt-0">
+              <Link to="/" className="text-blue-700 hover:underline font-medium">Dashboard</Link>
+              <Link to="/mascotas" className="text-blue-700 hover:underline font-medium">Mascotas</Link>
+              <Link to="/vacunas" className="text-blue-700 hover:underline font-medium">Vacunas</Link>
+              <Link to="/propietarios" className="text-blue-700 hover:underline font-medium">Propietarios</Link>
+              <Link to="/servicios" className="text-blue-700 hover:underline font-medium">Servicios</Link>
+            </nav>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-4 py-8">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/mascotas" element={<MascotasVisitas />} />
+            <Route path="/vacunas" element={<VacunasporTipo />} />
+            <Route path="/propietarios" element={<Propietarios />} />
+            <Route path="/servicios" element={<Servicios />} />
+            {/* Puedes agregar más rutas aquí */}
+          </Routes>
+        </main>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
