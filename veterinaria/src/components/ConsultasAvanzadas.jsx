@@ -26,28 +26,27 @@ function App() {
           title="🐾 Mascotas con más visitas"
           description="Listado de mascotas que han ido más veces al veterinario"
           data={mascotas}
-          fields={['nombre', 'especie', 'total_visitas']}
+          fields={['nombre', 'tipo', 'total_visitas']} 
         />
 
         <ExpandableCard
           title="💉 Vacunas por tipo de animal"
           description="Cantidad de vacunas aplicadas según el tipo de mascota"
           data={vacunas}
-          // No especificamos campos: se detectan automáticamente
         />
 
         <ExpandableCard
           title="👨‍👩‍👧 Propietarios con más de 3 mascotas"
           description="Dueños que tienen 4 o más animales registrados"
           data={propietarios}
-          fields={['nombre', 'cantidad_mascotas']}
+          fields={['nombre', 'total_mascotas']} // <- Ajusta según nombre real del backend
         />
 
         <ExpandableCard
           title="🛠 Servicios más solicitados"
           description="Servicios veterinarios que han sido más utilizados"
           data={servicios}
-          // También autodetecta campos
+          // Se auto-detectan los campos
         />
       </div>
     </div>
@@ -56,7 +55,6 @@ function App() {
 
 function ExpandableCard({ title, description, data, fields = [] }) {
   const [expanded, setExpanded] = useState(false);
-
   const toggleExpanded = () => setExpanded(!expanded);
   const displayedData = expanded ? data : data.slice(0, 3);
 
