@@ -39,14 +39,14 @@ function App() {
           title="👨‍👩‍👧 Propietarios con más de 3 mascotas"
           description="Dueños que tienen 4 o más animales registrados"
           data={propietarios}
-          fields={['nombre', 'total_mascotas']} // <- Ajusta según nombre real del backend
+          fields={['nombre', 'total_mascotas','email', 'telefono']} 
         />
 
         <ExpandableCard
           title="🛠 Servicios más solicitados"
           description="Servicios veterinarios que han sido más utilizados"
           data={servicios}
-          // Se auto-detectan los campos
+        
         />
       </div>
     </div>
